@@ -12,7 +12,7 @@
 
 ### 2. Baixe o bot em: https://github.com/DanielHe4rt/bbbot/archive/master.zip
 
-### 3. Entre na pasta do BOT e clique em `intall.bat`;
+### 3. Entre na pasta do BOT e clique em `install.bat`;
 
 ### 4. Execute `run-server.bat` e preencha os dados de acesso da globo (e-mail e senha).
 
