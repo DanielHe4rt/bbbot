@@ -14,6 +14,7 @@
 ### 3. Entre na pasta do BOT e clique em `intall.bat`;
 ### 4. Edite o arquivo `run-server.bat`(com o bloco de notas) para `node index.js seu@email.com senhaDAglobo`.
 ### 5. Pronto só clicar no `run-server.bat` ;)
+### 6. Caso seu script trave no login, troque o comando do `run-server.bat` para `node index.js seu@email.com senhaDAglobo login`
 
 ## :rocket: 5 minutes quick start
 
