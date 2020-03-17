@@ -189,7 +189,7 @@ let challengeUrl = "https://captcha.globo.com/api/challenge/generate";
         console.log(calcPosition);
         setTimeout(async () => {
           console.log("salve");
-          let finalPosition = 100;
+          let finalPosition = 100 + calcPosition[0] + 30 * 1.5;
           console.log(finalPosition);
           await page.mouse.click(100, 400);
           await page.mouse.click(finalPosition, 400);
