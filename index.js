@@ -1,6 +1,7 @@
-const puppeteer = require('puppeteer');
-const configs = require('./config');
-const fs = require('fs');
+if (process.argv.length !== 4) {
+  console.log("Como usar: node index.js usuario@usuario.com senha");
+  return false;
+}
 
 const { installMouseHelper } = require('./mouseHelper');
 const {
@@ -26,8 +27,8 @@ const {
   });
   await page.waitForNavigation();
 
-  await page.type('#login', configs.credentials.username);
-  await page.type('#password', configs.credentials.password);
+  await page.type("#login", process.argv[2]);
+  await page.type("#password", process.argv[3]);
   await page.click("[class='button ng-scope']");
   await page.waitForNavigation();
   await page.goto(configs.links.paredaoUrl, {

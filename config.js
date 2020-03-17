@@ -1,8 +1,3 @@
-let credentials = {
-  username: "email",
-  password: "password"
-};
-
 let links = {
   challengeAccepted:
     "https://royale.globo.com/polls/6816223c-7508-4267-a9e2-dcce85edd7f2/votes",
@@ -25,4 +20,4 @@ let xpaths = {
   topButtom: "/html/body/div[1]]"
 };
 
-module.exports = { credentials, xpaths, links };
+module.exports = { xpaths, links };
