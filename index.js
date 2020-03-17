@@ -76,7 +76,7 @@ const {
       parseInt(response.status()) >= 403 &&
       request.method() === "POST"
     ) {
-      console.log("deu ruim");
+      console.log("Voto não computado =/");
 
       await page.waitForXPath(configs.xpaths.buttonCaptcha).then(async () => {
         await clickXPath(page, configs.xpaths.buttonCaptcha);
@@ -95,7 +95,6 @@ const {
             return false;
           }
           let finalPosition = 100 + calcPosition[0] + 30 * 1.5;
-          console.log("position", finalPosition, calcPosition);
           calcPosition = false;
           await scrollToTop(page);
           await page.mouse.move(finalPosition, 555);
