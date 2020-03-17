@@ -1,4 +1,4 @@
-if (process.argv.length !== 4) {
+if (process.argv.length < 4) {
   console.log("Como usar: node index.js usuario@usuario.com senha");
   return false;
 }
@@ -30,7 +30,9 @@ const {
   await page.goto(configs.links.globoLoginUrl, {
     waitUntil: "networkidle2"
   });
-  // await page.waitForNavigation();
+  if (process.argv[4] === "login") {
+    await page.waitForNavigation();
+  }
 
   await page.type("#login", process.argv[2]);
   await page.type("#password", process.argv[3]);
