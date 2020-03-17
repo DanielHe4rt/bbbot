@@ -10,7 +10,7 @@
 
 ## :rocket: 5 minutes quick start
 
-:bulb: Install all packages of the `composer.json` on your Node project. This will download everything you need.
+:bulb: Install all packages of the `package.json` on your Node project. This will download everything you need.
 
 ```
 npm install
