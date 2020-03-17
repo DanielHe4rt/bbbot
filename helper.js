@@ -138,6 +138,16 @@ const clickXPath = async (page, xpath) => {
   }, 1000);
 };
 
+const removeSponsor = async page => {
+  await page.evaluate(_ => {
+    var style = document.createElement('style');
+    style.type = 'text/css';
+    style.innerHTML =
+      '.tag-manager-publicidade-container { display: none; !important}';
+    document.getElementsByTagName('head')[0].appendChild(style);
+  });
+};
+
 const scrollToTop = async page => {
   await page.evaluate(_ => {
     window.scrollBy(0, -10000);
@@ -177,5 +187,6 @@ module.exports = {
   refreshCaptcha,
   clickXPath,
   scrollToTop,
-  revote
+  revote,
+  removeSponsor
 };

@@ -8,7 +8,8 @@ const {
   clickXPath,
   scrollToTop,
   resolveImages,
-  revote
+  revote,
+  removeSponsor
 } = require('./helper');
 
 (async () => {
@@ -32,6 +33,8 @@ const {
   await page.goto(configs.links.paredaoUrl, {
     waitUntil: 'networkidle2'
   });
+
+  removeSponsor(page);
 
   await page.waitForXPath(configs.xpaths.user).then(async () => {
     await clickXPath(page, configs.xpaths.user);
