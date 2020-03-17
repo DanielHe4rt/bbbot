@@ -1,5 +1,7 @@
+#!/usr/bin/env node
+
 if (process.argv.length < 4) {
-  console.log("Como usar: node index.js usuario@usuario.com senha");
+  console.log("Como usar: npx bbbot email@email.com senha");
   return false;
 }
 
