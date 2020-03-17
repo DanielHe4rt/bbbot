@@ -6,6 +6,7 @@ if (process.argv.length !== 4) {
 const puppeteer = require("puppeteer");
 const configs = require("./config");
 const fs = require("fs");
+let voteCounter = 0;
 
 const { installMouseHelper } = require("./mouseHelper");
 const {
@@ -66,7 +67,8 @@ const {
       parseInt(response.status()) === 200 &&
       request.method() === "POST"
     ) {
-      console.log("deu bom");
+      voteCounter++;
+      console.log("Votos computados: " + voteCounter);
       await revote(page);
     }
     if (
