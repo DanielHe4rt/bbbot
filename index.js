@@ -1,35 +1,36 @@
-const puppeteer = require("puppeteer");
-const configs = require("./config");
-const fs = require("fs");
+const puppeteer = require('puppeteer');
+const configs = require('./config');
+const fs = require('fs');
 
-const { installMouseHelper } = require("./mouseHelper");
+const { installMouseHelper } = require('./mouseHelper');
 const {
   refreshCaptcha,
   clickXPath,
   scrollToTop,
   resolveImages,
   revote
-} = require("./helper");
+} = require('./helper');
 
 (async () => {
   const browser = await puppeteer.launch({
     headless: false,
     defaultViewport: null,
-    args: ["--window-size=200,1000"]
+    args: ['--window-size=200,1000']
   });
 
   const page = await browser.newPage();
   await installMouseHelper(page);
   await page.goto(configs.links.globoLoginUrl, {
-    waitUntil: "networkidle2"
+    waitUntil: 'networkidle2'
   });
+  await page.waitForNavigation();
 
-  await page.type("#login", configs.credentials.username);
-  await page.type("#password", configs.credentials.password);
+  await page.type('#login', configs.credentials.username);
+  await page.type('#password', configs.credentials.password);
   await page.click("[class='button ng-scope']");
   await page.waitForNavigation();
   await page.goto(configs.links.paredaoUrl, {
-    waitUntil: "networkidle2"
+    waitUntil: 'networkidle2'
   });
 
   await page.waitForXPath(configs.xpaths.user).then(async () => {
@@ -47,7 +48,7 @@ const {
   });
   // Aqui começa a palhaçada dos hooks
 
-  page.on("response", async response => {
+  page.on('response', async response => {
     let calcPosition;
     let hookUrl = response.url();
     let request = response.request();
@@ -55,8 +56,8 @@ const {
     if (hookUrl.startsWith(configs.links.challengeUrl)) {
       let res = await response.json();
       let { symbol, image } = res.data;
-      if (symbol === "calculadora") {
-        fs.writeFileSync("alo.png", image, "base64");
+      if (symbol === 'calculadora') {
+        fs.writeFileSync('alo.png', image, 'base64');
         calcPosition = await resolveImages();
         await setTimeout(async () => {
           if (!calcPosition) {
@@ -64,10 +65,11 @@ const {
             return false;
           }
           let finalPosition = 100 + calcPosition[0] + 30 * 1.5;
-          console.log("position", finalPosition, calcPosition);
+          console.log('position', finalPosition, calcPosition);
           calcPosition = false;
           setTimeout(async () => {
-            await page.mouse.click(finalPosition, 400);
+            await scrollToTop(page);
+            await page.mouse.click(finalPosition, 630);
           }, 500);
           revote(page);
         }, 2300);
@@ -78,9 +80,9 @@ const {
     if (
       hookUrl.startsWith(configs.links.challengeAccepted) &&
       parseInt(response.status()) === 200 &&
-      request.method() === "POST"
+      request.method() === 'POST'
     ) {
-      console.log("deu bom");
+      console.log('deu bom');
     }
   });
 })();
