@@ -72,7 +72,7 @@ const {
           calcPosition = false;
           setTimeout(async () => {
             await scrollToTop(page);
-            await page.mouse.click(finalPosition, 630);
+            await page.mouse.click(finalPosition, 560);
           }, 500);
           revote(page);
         }, 2300);

@@ -169,14 +169,15 @@ const revote = async page => {
         }, 1000);
         setTimeout(async () => {
           await clickXPath(page, configs.xpaths.user);
+          const refreshBtn = await page.waitForXPath(
+            configs.xpaths.buttonCaptcha
+          );
+          refreshBtn.click();
+          setTimeout(() => {
+            refreshBtn.click();
+            scrollToTop(page);
+          }, 200);
         }, 1000);
-        await page.waitForXPath(configs.xpaths.buttonCaptcha).then(async () => {
-          await refreshCaptcha(page, configs.xpaths.buttonCaptcha);
-          setTimeout(async () => {
-            await scrollToTop(page);
-            await refreshCaptcha(page, configs.xpaths.buttonCaptcha);
-          }, 1000);
-        });
       }, 750);
     });
   }, 3000);
