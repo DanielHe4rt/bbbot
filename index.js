@@ -1,264 +1,107 @@
-const puppeteer = require('puppeteer');
-const credentials = require('./config');
-const fs = require('fs');
-const { createCanvas, loadImage } = require('canvas');
-const { installMouseHelper } = require('./mouseHelper');
-const canvas = createCanvas(265, 53);
-const ctx = canvas.getContext('2d');
+const puppeteer = require("puppeteer");
+const configs = require("./config");
+const fs = require("fs");
 
-let globoLoginUrl = 'https://minhaconta.globo.com';
+const { installMouseHelper } = require("./mouseHelper");
+const {
+  refreshCaptcha,
+  clickXPath,
+  scrollToTop,
+  resolveImages
+} = require("./helper");
+
+let calcPosition;
+
+let globoLoginUrl = "https://minhaconta.globo.com";
 let paredaoUrl =
-  'https://gshow.globo.com/realities/bbb/bbb20/votacao/paredao-bbb20-quem-voce-quer-eliminar-babu-pyong-ou-rafa-6bb86a70-ac24-48e7-bdb8-a6cd83009ef3.ghtml';
-let challengeUrl = 'https://captcha.globo.com/api/challenge/generate';
+  "https://gshow.globo.com/realities/bbb/bbb20/votacao/paredao-bbb20-quem-voce-quer-eliminar-babu-pyong-ou-rafa-6bb86a70-ac24-48e7-bdb8-a6cd83009ef3.ghtml";
+let challengeUrl = "https://captcha.globo.com/api/challenge/generate";
 (async () => {
   const browser = await puppeteer.launch({
     headless: false,
     defaultViewport: null,
-    args: ['--window-size=200,600']
+    args: ["--window-size=200,600"]
   });
 
   const page = await browser.newPage();
   await installMouseHelper(page);
-  await page.goto(globoLoginUrl);
+  await page.goto(globoLoginUrl, {
+    waitUntil: "networkidle2"
+  });
 
-  await page.type('#login', credentials.config.username);
-  await page.type('#password', credentials.config.password);
+  await page.type("#login", configs.credentials.username);
+  await page.type("#password", configs.credentials.password);
   await page.click("[class='button ng-scope']");
   await page.waitForNavigation();
   await page.goto(paredaoUrl, {
-    waitUntil: 'networkidle2'
+    waitUntil: "networkidle2"
   });
 
-  /*let handles = await page.$x(
-    '/html/body/div[2]/div[4]/div/div[1]/div[4]/div[2]/div'
-  );
-  setTimeout(() => {
-    console.log(handles[0], handles[1]);
-    handles[0].click();
-  }, 2000);*/
+  await page.waitForXPath(configs.xpaths.user).then(async () => {
+    await clickXPath(page, configs.xpaths.user);
+  });
 
-  await page
-    .waitForXPath('/html/body/div[2]/div[4]/div/div[1]/div[4]/div[2]/div')
-    .then(async () => {
-      let handler = await page.$x(
-        '/html/body/div[2]/div[4]/div/div[1]/div[4]/div[2]/div'
-      );
-      setTimeout(() => {
-        handler[0].click();
-      }, 2000);
-    });
-
-  await page
-    .waitForXPath(
-      '/html/body/div[2]/div[4]/div/div[1]/div[4]/div[2]/div[2]/div/div/div[3]/button'
-    )
-    .then(async () => {
-      let handler = await page.$x(
-        '/html/body/div[2]/div[4]/div/div[1]/div[4]/div[2]/div[2]/div/div/div[3]/button'
-      );
-      setTimeout(() => {
-        handler[0].click();
-      }, 1000);
-    });
-  await page
-    .waitForXPath(
-      '/html/body/div[2]/div[4]/div/div[1]/div[4]/div[2]/div[2]/div/div/div[2]/div/div[2]/img'
-    )
-    .then(async () => {
-      let handler = await page.$x(
-        '/html/body/div[2]/div[4]/div/div[1]/div[4]/div[2]/div[2]/div/div/div[2]/div/div[2]/img'
-      );
-      setTimeout(() => {
-        handler[0].focus();
-      }, 1000);
-    });
+  await page.waitForXPath(configs.xpaths.buttonCaptcha).then(async () => {
+    await clickXPath(page, configs.xpaths.buttonCaptcha);
+  });
+  await page.waitForXPath(configs.xpaths.imgCaptcha).then(async () => {
+    let handler = await page.$x(configs.xpaths.imgCaptcha);
+    setTimeout(() => {
+      handler[0].focus();
+    }, 1000);
+  });
   // Aqui começa a palhaçada dos hooks
-  const isWhite = data => {
-    return data[0] == 255 && data[1] == 255 && data[2] == 255 ? true : false;
-  };
 
-  const isColumnWhite = (ctx, height, x) => {
-    for (let y = 0; y < height; y++) {
-      let data = ctx.getImageData(x, y, 1, 1).data;
-      if (!isWhite(data)) return false;
-    }
-    return true;
-  };
-
-  const isRowWhite = (ctx, width, y) => {
-    for (let x = 0; x < width; x++) {
-      let data = ctx.getImageData(x, y, 1, 1).data;
-      if (!isWhite(data)) return false;
-    }
-    return true;
-  };
-
-  const checkImage = (canvas, ctx, width) => {
-    let results = {
-      white: 0,
-      black: 0
-    };
-    for (let i = 0; i <= width; i++) {
-      for (let y = 0; y <= 53; y++) {
-        let data = ctx.getImageData(i, y, 1, 1).data;
-        isWhite(data) ? results.white++ : results.black++;
-      }
-    }
-    return results;
-  };
-
-  const findInflections = (ctx, width) => {
-    let results = {
-      highest: 0,
-      lowest: 0
-    };
-
-    for (let y = 0; y < 53; y++) {
-      if (!isRowWhite(ctx, width, y) && !results.highest) {
-        results.highest = y;
-      }
-      if (!isRowWhite(ctx, width, y)) {
-        results.lowest = y;
-      }
-    }
-
-    return results;
-  };
-
-  const findLines = ctx => {
-    let results = {
-      first: 0,
-      last: 0
-    };
-    for (let y = 0; y < 53; y++) {
-      let data = ctx.getImageData(0, y, 1, 1).data;
-      if (results.first === 0 && !isWhite(data)) {
-        results.first = y;
-      }
-      if (!isWhite(data)) {
-        results.last = y;
-      }
-    }
-
-    return results;
-  };
-  page.on('response', async response => {
+  page.on("response", async response => {
     let hookUrl = response.url();
     if (hookUrl.startsWith(challengeUrl)) {
       let res = await response.json();
       let { symbol, image } = res.data;
-      if (symbol === 'calculadora') {
-        let calcPosition;
-        fs.writeFileSync('alo.png', image, 'base64');
-        await loadImage('alo.png').then(img => {
-          let w2 = img.width;
-          let h2 = img.height;
+      if (symbol === "calculadora") {
+        fs.writeFileSync("alo.png", image, "base64");
+        calcPosition = await resolveImages();
+        console.log(calcPosition);
 
-          ctx.drawImage(img, 0, 0);
-          let item = [];
-          let items = [];
-          let isLastColorWhite = true;
-
-          for (let i = 0; i <= w2; i++) {
-            let isColumnWhiteHolder = isColumnWhite(ctx, h2, i);
-            if (!isColumnWhiteHolder && isLastColorWhite) {
-              item.push(i);
-            }
-            if (isColumnWhiteHolder && !isLastColorWhite) {
-              item.push(i);
-              items.push(item);
-              item = [];
-            }
-            isLastColorWhite = isColumnWhiteHolder;
+        await setTimeout(async () => {
+          console.log(calcPosition);
+          if (!calcPosition) {
+            await refreshCaptcha(page, configs.xpaths.buttonCaptcha);
           }
-          items.forEach((item, index) => {
-            let width = item[1] - item[0];
-            let newCanvas = createCanvas(width, 53);
-            let newCtx = newCanvas.getContext('2d');
-            newCtx.drawImage(img, item[0], 0, width, 53, 0, 0, width, 53);
-            let lines = findLines(newCtx, 53);
-            let inflections = findInflections(newCtx, width);
-            let data = {
-              color: checkImage(newCanvas, newCtx, width),
-              lines: findLines(newCtx, 53),
-              inflections: findInflections(newCtx, width),
-              diffHigh: lines.first - inflections.highest,
-              diffLow: inflections.lowest - lines.last
-            };
-            if (
-              (data.diffHigh == 6 || data.diffHigh == 7) &&
-              data.diffLow >= 4 &&
-              data.diffLow <= 9 &&
-              data.color.black >= 1150 &&
-              data.color.black <= 1265
-            ) {
-              calcPosition = item;
-            } else {
-            }
-          });
-        });
-
-        setTimeout(async () => {
           let finalPosition = 100 + calcPosition[0] + 30 * 1.5;
           console.log(finalPosition, calcPosition);
+          calcPosition = false;
           setTimeout(async () => {
-            // TODO: Falta fazer o 'votar novamente'.
             await page.mouse.click(finalPosition, 400);
           }, 500);
           setTimeout(async () => {
             await page
-              .waitForXPath(
-                '/html/body/div[2]/div[4]/div/div[3]/div/div/div[1]/div[1]/div[1]/span[1]'
-              )
+              .waitForXPath(configs.xpaths.finishText)
               .then(async () => {
-                const retryBtn = await page.$x(
-                  '/html/body/div[2]/div[4]/div/div[3]/div/div/div[1]/div[2]/button'
-                );
+                const retryBtn = await page.$x(configs.xpaths.finishButton);
                 console.log(retryBtn);
                 retryBtn[0].click();
                 setTimeout(async () => {
                   retryBtn[0].click();
                   await page
-                    .waitForXPath(
-                      '/html/body/div[2]/div[4]/div/div[1]/div[4]/div[2]/div'
-                    )
+                    .waitForXPath(configs.xpaths.user)
                     .then(async () => {
-                      page.evaluate(_ => {
-                        window.scrollBy(0, -10000);
-                      });
-                      let handler = await page.$x(
-                        '/html/body/div[2]/div[4]/div/div[1]/div[4]/div[2]/div'
-                      );
-                      setTimeout(async () => {
-                        handler[0].click();
-                        setTimeout(() => {
-                          handler[0].click();
-                        }, 1000);
-                      }, 2000);
-                      await page
-                        .waitForXPath(
-                          '/html/body/div[2]/div[4]/div/div[1]/div[4]/div[2]/div[2]/div/div/div[3]/button'
-                        )
-                        .then(() => {
-                          setTimeout(async () => {
-                            let challengeBtn = await page.$x(
-                              '/html/body/div[2]/div[4]/div/div[1]/div[4]/div[2]/div[2]/div/div/div[3]/button'
-                            );
-                            challengeBtn[0].click();
-                          }, 1000);
-                        });
+                      await clickXPath(page, configs.xpaths.user);
+                    });
+                  await scrollToTop(page);
+                  setTimeout(async () => {
+                    await clickXPath(page, configs.xpaths.user);
+                  }, 1000);
+                  await page
+                    .waitForXPath(configs.xpaths.buttonCaptcha)
+                    .then(async () => {
+                      await refreshCaptcha(page, configs.xpaths.buttonCaptcha);
                     });
                 }, 1000);
               });
           }, 3000);
         }, 2300);
       } else {
-        let handler = await page.$x(
-          '/html/body/div[2]/div[4]/div/div[1]/div[4]/div[2]/div[2]/div/div/div[3]/button'
-        );
-        setTimeout(() => {
-          handler[0].click();
-        }, 10);
+        await refreshCaptcha(page, configs.xpaths.buttonCaptcha);
       }
     }
   });
