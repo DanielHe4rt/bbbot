@@ -29,13 +29,24 @@ let challengeUrl = 'https://captcha.globo.com/api/challenge/generate';
     waitUntil: 'networkidle2'
   });
 
-  let handles = await page.$x(
+  /*let handles = await page.$x(
     '/html/body/div[2]/div[4]/div/div[1]/div[4]/div[2]/div'
   );
   setTimeout(() => {
     console.log(handles[0], handles[1]);
     handles[0].click();
-  }, 2000);
+  }, 2000);*/
+
+  await page
+    .waitForXPath('/html/body/div[2]/div[4]/div/div[1]/div[4]/div[2]/div')
+    .then(async () => {
+      let handler = await page.$x(
+        '/html/body/div[2]/div[4]/div/div[1]/div[4]/div[2]/div'
+      );
+      setTimeout(() => {
+        handler[0].click();
+      }, 2000);
+    });
 
   await page
     .waitForXPath(
@@ -189,11 +200,58 @@ let challengeUrl = 'https://captcha.globo.com/api/challenge/generate';
 
         setTimeout(async () => {
           let finalPosition = 100 + calcPosition[0] + 30 * 1.5;
+          console.log(finalPosition, calcPosition);
           setTimeout(async () => {
             // TODO: Falta fazer o 'votar novamente'.
             await page.mouse.click(finalPosition, 400);
           }, 500);
-        }, 1000);
+          setTimeout(async () => {
+            await page
+              .waitForXPath(
+                '/html/body/div[2]/div[4]/div/div[3]/div/div/div[1]/div[1]/div[1]/span[1]'
+              )
+              .then(async () => {
+                const retryBtn = await page.$x(
+                  '/html/body/div[2]/div[4]/div/div[3]/div/div/div[1]/div[2]/button'
+                );
+                console.log(retryBtn);
+                retryBtn[0].click();
+                setTimeout(async () => {
+                  retryBtn[0].click();
+                  await page
+                    .waitForXPath(
+                      '/html/body/div[2]/div[4]/div/div[1]/div[4]/div[2]/div'
+                    )
+                    .then(async () => {
+                      page.evaluate(_ => {
+                        window.scrollBy(0, -10000);
+                      });
+                      let handler = await page.$x(
+                        '/html/body/div[2]/div[4]/div/div[1]/div[4]/div[2]/div'
+                      );
+                      setTimeout(async () => {
+                        handler[0].click();
+                        setTimeout(() => {
+                          handler[0].click();
+                        }, 1000);
+                      }, 2000);
+                      await page
+                        .waitForXPath(
+                          '/html/body/div[2]/div[4]/div/div[1]/div[4]/div[2]/div[2]/div/div/div[3]/button'
+                        )
+                        .then(() => {
+                          setTimeout(async () => {
+                            let challengeBtn = await page.$x(
+                              '/html/body/div[2]/div[4]/div/div[1]/div[4]/div[2]/div[2]/div/div/div[3]/button'
+                            );
+                            challengeBtn[0].click();
+                          }, 1000);
+                        });
+                    });
+                }, 1000);
+              });
+          }, 3000);
+        }, 2300);
       } else {
         let handler = await page.$x(
           '/html/body/div[2]/div[4]/div/div[1]/div[4]/div[2]/div[2]/div/div/div[3]/button'
