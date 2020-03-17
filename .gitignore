@@ -1,0 +1,4 @@
+node_modules
+*.png
+package-lock.json
+config.js
