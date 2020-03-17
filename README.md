@@ -8,23 +8,22 @@
     Um bot pra ficar votando no Ping Pong no site da globo
 </h3> 
 
-## :rocket: 5 minutes quick start
+## Prerequisite: 
+- [Node.js](https://nodejs.org/en/download/).
 
-:bulb: Install all packages of the `package.json` on your Node project. This will download everything you need.
+## :rocket: Run
 
-```
-npm install
-```
-<br>
+:bulb: Execute the package passing your email and password:
 
-## :computer: Running the server
-
-:bulb: After all the dependencies have been installed, you can run the server on the Windows running the file <strong>run-server.bat</strong>. But if you are a Linux user. just type the following command:
-```
-node index.js
+```sh
+npx bbbot email password
 ```
 
-<br>
+Example with email `foo@bar.com` and password `123456`:
+
+```sh
+npx bbbot foo@bar.com 123456
+```
 
 ## :v: Greetz 
 
@@ -32,11 +31,6 @@ node index.js
 lendário herrera
 ```
 
-
-
 ## :mailbox_with_mail: License 
 
 This software was created for study purposes only. Feel free to try it out.
-
-
-

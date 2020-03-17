@@ -1,5 +1,6 @@
+#!/usr/bin/env node
+
 const puppeteer = require('puppeteer');
-const credentials = require('./config');
 const fs = require('fs');
 const { createCanvas, loadImage } = require('canvas');
 const { installMouseHelper } = require('./mouseHelper');
@@ -21,8 +22,8 @@ let challengeUrl = 'https://captcha.globo.com/api/challenge/generate';
   await installMouseHelper(page);
   await page.goto(globoLoginUrl);
 
-  await page.type('#login', credentials.config.username);
-  await page.type('#password', credentials.config.password);
+  await page.type('#login', process.argv[2]);
+  await page.type('#password', process.argv[3]);
   await page.click("[class='button ng-scope']");
   await page.waitForNavigation();
   await page.goto(paredaoUrl, {
