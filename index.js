@@ -29,7 +29,6 @@ let challengeUrl = "https://captcha.globo.com/api/challenge/generate";
     waitUntil: "networkidle2"
   });
 
-  // while (true) {
     let handles = await page.$$(".HkYyhPWbPFN45MEcUG6p8");
     setTimeout(() => {
       handles[1].click();
@@ -189,5 +188,4 @@ let challengeUrl = "https://captcha.globo.com/api/challenge/generate";
         }
       }
     });
-  // }
 })();
