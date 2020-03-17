@@ -1,6 +1,8 @@
-const { createCanvas, loadImage } = require("canvas");
+const configs = require('./config');
+
+const { createCanvas, loadImage } = require('canvas');
 const canvas = createCanvas(265, 53);
-const ctx = canvas.getContext("2d");
+const ctx = canvas.getContext('2d');
 const isColumnWhite = (ctx, height, x) => {
   for (let y = 0; y < height; y++) {
     let data = ctx.getImageData(x, y, 1, 1).data;
@@ -10,7 +12,7 @@ const isColumnWhite = (ctx, height, x) => {
 };
 
 const resolveImages = async () => {
-  return await loadImage("alo.png").then(async img => {
+  return await loadImage('alo.png').then(async img => {
     let result = false;
     let w2 = img.width;
     let h2 = img.height;
@@ -35,7 +37,7 @@ const resolveImages = async () => {
     items.forEach((item, index) => {
       let width = item[1] - item[0];
       let newCanvas = createCanvas(width, 53);
-      let newCtx = newCanvas.getContext("2d");
+      let newCtx = newCanvas.getContext('2d');
       newCtx.drawImage(img, item[0], 0, width, 53, 0, 0, width, 53);
       let lines = findLines(newCtx, 53);
       let inflections = findInflections(newCtx, width);
@@ -142,9 +144,38 @@ const scrollToTop = async page => {
   });
 };
 
+const revote = async page => {
+  setTimeout(async () => {
+    await page.waitForXPath(configs.xpaths.finishText).then(async () => {
+      const retryBtn = await page.$x(configs.xpaths.finishButton);
+      console.log(retryBtn);
+      retryBtn[0].click();
+      setTimeout(async () => {
+        retryBtn[0].click();
+      }, 500);
+      setTimeout(async () => {
+        await scrollToTop(page);
+        setTimeout(async () => {
+          await clickXPath(page, configs.xpaths.user);
+        }, 1000);
+        setTimeout(async () => {
+          await clickXPath(page, configs.xpaths.user);
+        }, 1000);
+        await page.waitForXPath(configs.xpaths.buttonCaptcha).then(async () => {
+          await refreshCaptcha(page, configs.xpaths.buttonCaptcha);
+          setTimeout(async () => {
+            await refreshCaptcha(page, configs.xpaths.buttonCaptcha);
+          }, 1000);
+        });
+      }, 750);
+    });
+  }, 3000);
+};
+
 module.exports = {
   resolveImages,
   refreshCaptcha,
   clickXPath,
-  scrollToTop
+  scrollToTop,
+  revote
 };
