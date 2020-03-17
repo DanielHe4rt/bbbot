@@ -158,7 +158,7 @@ const revote = async page => {
   setTimeout(async () => {
     await page.waitForXPath(configs.xpaths.finishText).then(async () => {
       const retryBtn = await page.$x(configs.xpaths.finishButton);
-      retryBtn[0].click();
+      // retryBtn[0].click();
       setTimeout(async () => {
         retryBtn[0].click();
       }, 500);
