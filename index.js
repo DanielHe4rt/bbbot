@@ -186,13 +186,23 @@ let challengeUrl = "https://captcha.globo.com/api/challenge/generate";
         // agora "só" precisa achar a div da imagem, simular
         // um clique com offset com a metade do height
         // e entre o inicio e fim da imagem do calcPosition
-        console.log(calcPosition);
         setTimeout(async () => {
           console.log("salve");
-          let finalPosition = 100;
+          let finalPosition = 100 + calcPosition[0] + 30 * 1.5;
           console.log(finalPosition);
           await page.mouse.click(100, 400);
-          await page.mouse.click(finalPosition, 400);
+          setTimeout(async () => {
+            await page.mouse.click(finalPosition, 400);
+            await page
+              .waitForSelector("._3QLPDW1iykGM1e6tm04qJd")
+              .then(async () => {
+                let handler = await page.$$("._3QLPDW1iykGM1e6tm04qJd");
+                setTimeout(async () => {
+                  await handler[0].click();
+                }, 4000);
+                await handler[0].click();
+              });
+          });
         }, 1000);
       } else {
         let handler = await page.$$(".gc__1JSqe");
