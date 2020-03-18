@@ -22,14 +22,22 @@ const {
   const browser = await puppeteer.launch({
     headless: false,
     defaultViewport: null,
-    args: ["--window-size=200,1000"]
+    args: ["--window-size=200,1000"] 
   });
 
-  const page = await browser.newPage();
+  const [ page ] = await browser.pages();
   await installMouseHelper(page);
   await page.goto(configs.links.globoLoginUrl, {
     waitUntil: "networkidle2"
   });
+
+  try {
+    const visibleInput = await page.waitForSelector('.ng-pristine ng-invalid ng-invalid-required', {visible: true, timeout: 3000 })
+    console.log('Encontrado elemento visivel')
+  } catch (e) {
+    console.log('Não foi possivel encontrar o elemento visivel, output: ', e.message)
+  }
+
   if (process.argv[4] === "login") {
     await page.waitForNavigation();
   }
