@@ -88,7 +88,7 @@ const {
     if (hookUrl.startsWith(configs.links.challengeUrl)) {
       let res = await response.json();
       let { symbol, image } = res.data;
-      if (symbol === "calculadora") {
+      if (symbol === "mochila") {
         fs.writeFileSync("alo.png", image, "base64");
         calcPosition = await resolveImages();
         await setTimeout(async () => {
