@@ -127,7 +127,12 @@ const isWhite = data => {
 const refreshCaptcha = async (page, xpath) => {
   let handler = await page.$x(xpath);
   setTimeout(() => {
-    handler[0].click();
+    try {
+      handler[0].click();
+    } catch (error) {
+      console.log('Error, trying again')
+      refreshCaptcha( page, xpath)
+    }
   }, 10);
 };
 
@@ -135,7 +140,7 @@ const clickXPath = async (page, xpath) => {
   let handler = await page.$x(xpath);
   setTimeout(() => {
     handler[0].click();
-  }, 1000);
+  }, 1200);
 };
 
 const removeSponsor = async page => {
@@ -191,3 +196,4 @@ module.exports = {
   revote,
   removeSponsor
 };
+
