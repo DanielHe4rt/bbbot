@@ -1,15 +1,15 @@
 {
-  "name": "test-scrap",
+  "name": "bbbot",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
+    "axios": "^0.19.2",
     "canvas": "^2.6.1",
-    "puppeteer": "^2.1.1"
+    "dotenv": "^8.2.0",
+    "fs-extra": "^9.0.0",
+    "lodash": "^4.17.15",
+    "puppeteer": "^2.1.1",
+    "sharp": "^0.25.2"
   }
 }

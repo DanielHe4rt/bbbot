@@ -3,8 +3,10 @@
 </h1>
 
 <h3 align="center">
-    Um bot pra ficar votando no Ping Pong no site da globo
+    Um bot pra votar em alguém na plataforma do GSHOW
 </h3>
+
+# Disclaimer: NÃO TEMOS NENHUM CANDIDATO PREFERIDO, ESSE CÓDIGO FOI FEITO APENAS PARA ESTUDOS!!! SINTAM-SE LIVRES PARA UTILIZAR
 
 ## Como instalar e iniciar o bot?
 
@@ -38,11 +40,11 @@ node index.js
 
 <br>
 
-## :v: Greetz
+## :v: Contribuidores
 
-```
-lendário herrera
-```
+[danielhe4rt](https://twitter.com/danielhe4rt)
+
+[TheEduardoRFS](https://twitter.com/theeduardorfs)
 
 ## :mailbox_with_mail: License
 
