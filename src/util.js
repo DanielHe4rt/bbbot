@@ -12,7 +12,7 @@ const fsExtra = require('fs-extra');
 
 const timeout = ms => new Promise(resolve => setTimeout(resolve, ms));
 const runLogin = auth => async page => {
-  await page.goto(links.loginUrl);
+  await page.goto(links.loginUrl, { waitUntil: 'domcontentloaded' });
 
   const emailField = await page.waitForXPath(XPathContents.email);
   const passField = await page.waitForXPath(XPathContents.password);
