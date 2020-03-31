@@ -24,7 +24,7 @@ const runLogin = auth => async page => {
 
   await page.waitForNavigation();
   await page.goto(links.voteUrl);
-  removeCss(page);
+  // removeCss(page);
 };
 
 const configs = async () => {
