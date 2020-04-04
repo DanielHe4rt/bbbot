@@ -29,7 +29,7 @@ module.exports = () => {
 
   console.log(
     `[❌] Erro: Comando invalido
-  Utilize: node src/index.js [prior | manu | mari] seu@email.com sua_senha
+  Utilize: node src/index.js [babu | gabi | thelma] seu@email.com sua_senha
   Exemplo: node src/index.js prior eduardo@gmail.com minhasenha123`
       .split('\n')
       .map(str => str.trim())
