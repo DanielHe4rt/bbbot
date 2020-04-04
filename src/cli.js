@@ -4,19 +4,19 @@ require('dotenv/config');
 const getVictim = name => {
   name = name.toLowerCase();
   switch (name) {
-    case 'prior':
+    case 'babu':
       return 0;
-    case 'manu':
+    case 'gabi':
       return 1;
-    case 'mari':
+    case 'thelma':
       return 2;
   }
 
-  throw new Error('candidato invalido, use prior | manu | mari');
+  throw new Error('candidato invalido, use babu | gabi | thelma');
 };
 
 module.exports = () => {
-  const victim = process.argv[2] || 'manu';
+  const victim = process.argv[2] || 'gabi';
   const email = process.argv[3] || process.env.EMAIL;
   const password = process.argv[4] || process.env.PASSWORD;
 
