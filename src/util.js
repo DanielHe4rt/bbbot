@@ -11,6 +11,7 @@ let availableImages = [];
 const fsExtra = require('fs-extra');
 
 const timeout = ms => new Promise(resolve => setTimeout(resolve, ms));
+
 const runLogin = auth => async page => {
   await page.goto(links.loginUrl);
 
@@ -24,7 +25,7 @@ const runLogin = auth => async page => {
 
   await page.waitForNavigation();
   await page.goto(links.voteUrl);
-  // removeCss(page);
+  removeCss(page);
 };
 
 const configs = async () => {
@@ -51,14 +52,14 @@ const removeCss = async page => {
     display: none !important;
   }
   `;
-  await page.$eval('#banner_votacao1', e => {
+  /*await page.$eval('#banner_votacao1', e => {
     var me = $('#banner_votacao1');
     var newMe = $(
       '<img style="width: 100%;" src="https://i.imgur.com/4XShvht.gif">'
     );
     newMe.html(me.html());
     me.replaceWith(newMe);
-  });
+  });*/
   await page.addStyleTag({ content: css });
 };
 
@@ -96,10 +97,11 @@ const vote = victim => async page => {
 
 const revote = victim => async page => {
   await new Promise(resolve => setTimeout(resolve, 400));
-  const retryBtn = await page.waitForXPath(XPathContents.revoteBtn);
+  //const retryBtn = await page.waitForSelector('_3VpV6myQ0E-1rsgh9PoeaN _2RlpFUvPRVdsXs_oOyQ_pN');
 
-  await retryBtn.click();
+  //await retryBtn.click();
 
+  await page.goto(links.voteUrl);
   await new Promise(resolve => setTimeout(resolve, 400));
   vote(victim)(page);
 };
@@ -191,8 +193,8 @@ const challengePage = async (page, response, setToSave) => {
     if (mainSymbol.length === 0) {
       return false;
     }
-  }
-  */
+  }*/
+  
 
   if (mainSymbol.length === 1 && mainSymbol[1] === 'no existe') {
     return resetCaptcha(page);
@@ -244,7 +246,7 @@ const challengeAcceptedPage = victim => async (
 
   if (parseInt(status) === 200) {
     revote(victim)(_page);
-    if (toSave) {
+    //if (toSave) {
       try {
         const res = await instance.post('/vote', {
           success: true,
@@ -253,7 +255,7 @@ const challengeAcceptedPage = victim => async (
         });
         const { localVotes, totalVotes } = res.data;
         console.clear();
-        console.log('\x1b[35m', logoAscii);
+        //console.log('\x1b[35m', logoAscii);
         console.log(
           '\x1b[32m',
           `
@@ -264,10 +266,10 @@ const challengeAcceptedPage = victim => async (
       } catch (e) {
         console.log(e.response.data);
       }
-    }
+    //}
   } else {
     console.clear();
-    console.log('\x1b[35m', logoAscii);
+    //console.log('\x1b[35m', logoAscii);
     console.log(
       '\x1b[31m',
       `
