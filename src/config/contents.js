@@ -23,7 +23,7 @@ const links = {
     'https://gshow.globo.com/realities/bbb/bbb20/votacao/paredao-bbb20-quem-voce-quer-eliminar-babu-gabi-ou-thelma-305135b8-b442-4cc8-888f-2a01ed79cc2d.ghtml',
   challengeUrl: 'https://captcha.globo.com/api/challenge/generate',
   challengeAcceptedUrl:
-    'https://royale.globo.com/polls/8e81660d-89b5-4777-a324-6f2da878c5c7',
+    'https://royale.globo.com/polls/d4846f06-6560-4991-a1a8-934a037bc1f3',
   mainApi: 'http://bots.heartdevs.com/'
 };
 

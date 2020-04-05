@@ -1,7 +1,13 @@
 'use strict';
 require('dotenv/config');
 
-const getVictim = name => {
+const getVictim = victim => {
+
+  if ( victim >= 0 && victim <= 2 )
+  {
+    return victim; 
+  }
+
   throw new Error('candidato invalido, use 0 | 1 | 2');
 };
 
