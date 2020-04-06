@@ -20,8 +20,7 @@ smmmmmdhhddo. \`/hmmmmmds-     \`:.
 const links = {
   loginUrl: 'https://minhaconta.globo.com',
   voteUrl:
-    'https://gshow.globo.com/realities/bbb/bbb20/votacao/paredao-bbb20-quem-voce-quer-eliminar-babu-gabi-ou-thelma-305135b8-b442-4cc8-888f-2a01ed79cc2d.ghtml',
-  challengeUrl: 'https://captcha.globo.com/api/challenge/generate',
+    'https://gshow.globo.com/realities/bbb/bbb20/votacao/paredao-bbb20-quem-voce-quer-eliminar-babu-flayslane-ou-marcela-5ed83d00-014e-401d-80c8-20314769ce2f.ghtml',
   challengeAcceptedUrl:
     'https://royale.globo.com/polls/d4846f06-6560-4991-a1a8-934a037bc1f3',
   mainApi: 'http://bots.heartdevs.com/'
@@ -47,8 +46,8 @@ const users = [
 
 /*
   BABU = 0
-  GABI = 1
-  THELMA = 2
+  FLAY = 1
+  MARCELA = 2
 */
 
 module.exports = {

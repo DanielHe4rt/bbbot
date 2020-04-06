@@ -12,7 +12,7 @@ const getVictim = victim => {
 };
 
 module.exports = () => {
-  const victim = process.argv[2] || 'gabi';
+  const victim = process.argv[2] || '2';
   const email = process.argv[3] || process.env.EMAIL;
   const password = process.argv[4] || process.env.PASSWORD;
 
@@ -26,7 +26,7 @@ module.exports = () => {
   console.log(
     `[❌] Erro: Comando invalido
   Utilize: node src/index.js [0 | 1 | 2] seu@email.com sua_senha
-  Exemplo: node src/index.js 1 eduardo@gmail.com minhasenha123`
+  Exemplo: node src/index.js 2 eduardo@gmail.com minhasenha123`
       .split('\n')
       .map(str => str.trim())
       .join('\n')
