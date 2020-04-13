@@ -6,8 +6,6 @@
     Um bot pra votar em alguém na plataforma do GSHOW
 </h3>
 
-# Disclaimer: NÃO TEMOS NENHUM CANDIDATO PREFERIDO, ESSE CÓDIGO FOI FEITO APENAS PARA ESTUDOS!!! SINTAM-SE LIVRES PARA UTILIZAR
-
 ## Como instalar e iniciar o bot?
 
 ### 1. Baixe o node em: https://nodejs.org/en/download/
