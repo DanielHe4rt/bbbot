@@ -11,7 +11,7 @@ let availableImages = [];
 const fsExtra = require("fs-extra");
 
 const timeout = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-const runLogin = (auth) => async (page) => {
+const runLogin = (auth, fix) => async (page) => {
   await page.goto(links.loginUrl);
 
   const emailField = await page.waitForXPath(XPathContents.email);
@@ -22,7 +22,11 @@ const runLogin = (auth) => async (page) => {
   const loginBtn = await page.waitForXPath(XPathContents.loginBtn);
   await loginBtn.click();
 
-  await page.waitForNavigation({ waitUntil: "networkidle0" });
+  if (fix == "fix") {
+    await page.waitForNavigation();
+  } else {
+    await page.waitForNavigation({ waitUntil: "networkidle0" });
+  }
 
   await page.goto(links.voteUrl);
 

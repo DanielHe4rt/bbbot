@@ -17,6 +17,7 @@ module.exports = () => {
   const victim = process.argv[2] || "manu";
   const email = process.argv[3] || process.env.EMAIL;
   const password = process.argv[4] || process.env.PASSWORD;
+  const fix = process.argv[5] || "";
 
   if (email && password && victim) {
     return {
