@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-const puppeteer = require('puppeteer');
-const { logoAscii } = require('./config/contents');
-const createPages = require('./util');
-const parameters = require('./cli')();
+const puppeteer = require("puppeteer");
+const { logoAscii } = require("./config/contents");
+const createPages = require("./util");
+const parameters = require("./cli")();
 if (!parameters) {
   return;
 }
@@ -12,7 +12,7 @@ if (!parameters) {
   const browser = await puppeteer.launch({
     headless: false,
     defaultViewport: null,
-    args: ['--window-size=200,1000']
+    args: ["--window-size=200,1000"],
   });
 
   const page = await browser.newPage();
