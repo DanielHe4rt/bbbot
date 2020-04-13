@@ -257,7 +257,7 @@ const challengeAcceptedPage = victim => async (
         console.log(
           '\x1b[32m',
           `
-    [✅] TOTAIS DE VOTOS: ${totalVotes}
+    [✅] TOTAL DE VOTOS: ${totalVotes}
     [✅] VOTOS COMPUTADOS: ${localVotes}
         `
         );
