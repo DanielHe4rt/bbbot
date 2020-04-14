@@ -22,7 +22,7 @@ const runLogin = (auth, fix) => async (page) => {
   const loginBtn = await page.waitForXPath(XPathContents.loginBtn);
   await loginBtn.click();
 
-  if (fix == "fix") {
+  if (fix == "yes") {
     await page.waitForNavigation();
   } else {
     await page.waitForNavigation({ waitUntil: "networkidle0" });
@@ -30,7 +30,7 @@ const runLogin = (auth, fix) => async (page) => {
 
   await page.goto(links.voteUrl);
 
-  // removeCss(page);
+  removeCss(page);
 };
 
 const configs = async () => {
@@ -156,7 +156,7 @@ const fetchSymbolData = async (symbol) => {
     console.log(e.response.data);
   }
 };
-const challengePage = async (page, response, setToSave) => {
+const challengePage = async (page, response, setToSave, mode) => {
   let { data } = await response.json();
   let { symbol, image } = data;
   let mainSymbol = (await fetchSymbolData(symbol)) || [];
@@ -228,17 +228,26 @@ const challengePage = async (page, response, setToSave) => {
     .sort(([a], [b]) => a.score - b.score)[0];
 
   console.log("Symbol", symbol);
-
-  if (bestBet.score === undefined) {
-    console.log("Periodo de testes: figura não encontrada");
-    console.log("Vote manualmente para próximo reconhecimento");
-    return false;
-  }
-  if (bestBet.score > 80) {
-    console.log("Chute de posição:", index + 1, bestBet.score);
-    // return resetCaptcha(page);
+  console.log(mode);
+  if (mode === "training") {
+    if (bestBet.score === undefined) {
+      console.log("Periodo de testes: figura não encontrada");
+      console.log("Vote manualmente para próximo reconhecimento");
+      return false;
+    } else {
+      if (bestBet.score > 100) {
+        console.log("Chute de posição:", index + 1, bestBet.score);
+      } else {
+        console.log("Posição mais provável:", index + 1, bestBet.score);
+      }
+    }
+    console.log("Modo treino ativado. Selecione uma opção para continuar.");
   } else {
-    console.log("Posição mais provável:", index + 1, bestBet.score);
+    if (bestBet.score === undefined) {
+      console.log("Periodo de testes: figura não encontrada");
+      console.log("Vote manualmente para próximo reconhecimento");
+      return resetCaptcha(page);
+    }
     return selectCaptcha(page, index);
   }
 };
@@ -288,7 +297,7 @@ const challengeAcceptedPage = (victim) => async (
 
   setToSave(null);
 };
-const listenEvents = (victim) => async (page, browser) => {
+const listenEvents = (victim) => async (page, browser, mode) => {
   let toSave = null;
   const setToSave = (toSaveData) => {
     toSave = toSaveData;
@@ -321,7 +330,7 @@ const listenEvents = (victim) => async (page, browser) => {
     }
 
     if (hookUrl.startsWith(links.challengeUrl)) {
-      challengePage(page, response, setToSave);
+      challengePage(page, response, setToSave, mode);
     }
   });
 };

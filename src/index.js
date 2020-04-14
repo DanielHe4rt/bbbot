@@ -22,5 +22,6 @@ if (!parameters) {
   const { runLogin, vote, listenEvents } = createPages(parameters);
   runLogin(page, parameters.fix);
   vote(page);
-  listenEvents(page, browser);
+
+  listenEvents(page, browser, parameters.mode);
 })();

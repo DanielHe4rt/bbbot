@@ -14,15 +14,18 @@ const getVictim = (name) => {
 };
 
 module.exports = () => {
-  const victim = process.argv[2] || "manu";
+  const victim = process.argv[2] || "gizelly";
   const email = process.argv[3] || process.env.EMAIL;
   const password = process.argv[4] || process.env.PASSWORD;
-  const fix = process.argv[5] || "";
+  const fix = process.argv[5] || "no";
+  const mode = process.argv[6] || "training";
 
   if (email && password && victim) {
     return {
       victim: getVictim(victim),
       login: { email, password },
+      fix,
+      mode,
     };
   }
 
