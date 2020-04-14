@@ -234,7 +234,7 @@ const challengePage = async (page, response, setToSave) => {
     console.log("Vote manualmente para próximo reconhecimento");
     return false;
   }
-  if (bestBet.score > 100) {
+  if (bestBet.score > 80) {
     console.log("Chute de posição:", index + 1, bestBet.score);
     // return resetCaptcha(page);
   } else {
