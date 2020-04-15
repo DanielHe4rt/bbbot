@@ -8,7 +8,7 @@
 
 ## Como instalar e iniciar o bot?
 
-### 1. Baixe o node em: https://nodejs.org/en/download/
+### 1. Baixe o Node em: https://nodejs.org/en/download/
 
 ### 2. Baixe o bot em: https://github.com/DanielHe4rt/bbbot/archive/master.zip
 
@@ -17,6 +17,8 @@
 ### 4. Execute `run-server.bat` e preencha os dados de acesso da globo (e-mail e senha).
 
 ### 5. Caso seu usuário pare no login, use o `run-server-login.bat` para resolver o problema.
+
+### 6. Se fechar após digitar a senha, entra na pasta pelo Prompt de Comando ("CMD") e digita o comando: "node src/index.js manu seuemail@gmail.com SuaSenha", sem as aspas. Após isso será iniciado o navegador Chromium (parecido com o Chrome) e o bot entrará em funcionamento.
 
 ## :rocket: 5 minutes quick start
 
@@ -43,6 +45,8 @@ node index.js
 [danielhe4rt](https://twitter.com/danielhe4rt)
 
 [TheEduardoRFS](https://twitter.com/theeduardorfs)
+
+[Fabio Selau](https://www.facebook.com/Profile.dart)
 
 ## :mailbox_with_mail: License
 
